@@ -3,7 +3,15 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
+  let token;
+
+  try {
+    token = await getToken({ req: request });
+  } catch (error) {
+    console.error("Error retrieving token:", error);
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   console.log('Token:', token);  // Log token value to ensure it's being retrieved
 
   const { pathname } = request.nextUrl;
@@ -20,6 +28,7 @@ export async function middleware(request: NextRequest) {
     "/otp",
     "/resetsuccess",
     "/verifycode",
+    "/"
   ];
 
   // If the user is authenticated and tries to access an auth page, redirect to home
