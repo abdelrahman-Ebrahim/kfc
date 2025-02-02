@@ -11,14 +11,12 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          // Call your login API
+          console.log("Credentials received:", credentials); // Log credentials
           const response = await fetch(
             "https://mohasel.net/api/Client/Auth/Login",
             {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 email: credentials?.email,
                 password: credentials?.password,
@@ -27,9 +25,9 @@ const handler = NextAuth({
           );
 
           const data = await response.json();
+          console.log("Backend Response:", data); // Log the backend response
 
           if (response.ok && data.token) {
-            // Return the user object with the token and refresh token
             return {
               id: data.user.id,
               name: data.user.name,
@@ -38,19 +36,11 @@ const handler = NextAuth({
               refreshToken: data.refreshToken,
             };
           } else {
-            // Extract the error message from the backend response
-            const errorMessage =
-              data.errors?.Password?.[0] || // Specific password error
-              data.errors?.email?.[0] || // Specific email error
-              data.title || // General error title
-              "Invalid email or password"; // Fallback message
-
-            // Throw an error with the extracted message
-            throw new Error(errorMessage);
+            throw new Error(data.title || "Invalid email or password");
           }
-        } catch (error: any) {
-          console.error("Authentication error:", error);
-          throw new Error(error.message); // Pass the error message to NextAuth.js
+        } catch (error) {
+          console.error("Authorization Error:", error);
+          throw new Error("Authentication failed");
         }
       },
     }),
@@ -92,7 +82,6 @@ const handler = NextAuth({
 
   // Enable debug mode for development
   debug: process.env.NODE_ENV === "development",
-  
 });
 
 export { handler as GET, handler as POST };
