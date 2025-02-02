@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";  // Import axios
 
 const handler = NextAuth({
   providers: [
@@ -11,23 +12,23 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          console.log("Credentials received:", credentials); // Log credentials
-          const response = await fetch(
-            "https://mohasel.net/api/Client/Auth/Login",
+          const response = await axios.post(
+            "https://mohasel.net/api/Client/Auth/Login", 
             {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: credentials?.email,
-                password: credentials?.password,
-              }),
+              email: credentials?.email,
+              password: credentials?.password,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
           );
 
-          const data = await response.json();
-          console.log("Backend Response:", data); // Log the backend response
+          // Access response data directly from axios response object
+          const data = response.data;
 
-          if (response.ok && data.token) {
+          if (response.status === 200 && data.token) {
             return {
               id: data.user.id,
               name: data.user.name,
