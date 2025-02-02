@@ -74,7 +74,8 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // Add the token and refresh token to the session object
+      console.log("Session Callback - Token:", token); // Log the token
+      console.log("Session Callback - Session:", session); // Log the session
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
       return session;

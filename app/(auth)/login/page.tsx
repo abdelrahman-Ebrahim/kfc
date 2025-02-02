@@ -61,7 +61,7 @@ export default function Login() {
         setErrorMessage(errorMessage);
       } else {
         // Redirect to the dashboard on success
-        router.push("/");
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Login Failed:", error);
