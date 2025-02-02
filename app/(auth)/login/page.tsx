@@ -47,6 +47,7 @@ export default function Login() {
         redirect: false,
         email: data.email,
         password: data.password,
+        callbackUrl: "/", // Redirect to home page after login
       });
   
       console.log("SignIn Result:", result); // Log the result
