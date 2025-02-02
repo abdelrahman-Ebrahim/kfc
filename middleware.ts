@@ -25,13 +25,13 @@ export async function middleware(request: NextRequest) {
   // If the user is authenticated and tries to access an auth page, redirect to home
   if (token && authPages.includes(pathname)) {
     console.log("User is authenticated, redirecting to /");
-    return NextResponse.redirect(new URL("/", request.nextUrl.origin));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // If the user is not authenticated and tries to access a protected page, redirect to login
   if (!token && !authPages.includes(pathname)) {
     console.log("No token found, redirecting to /login");
-    return NextResponse.redirect(new URL("/", request.nextUrl.origin));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Allow the request to proceed
