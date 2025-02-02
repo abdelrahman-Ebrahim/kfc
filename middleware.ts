@@ -18,6 +18,7 @@ export async function middleware(request: NextRequest) {
     "/otp",
     "/resetsuccess",
     "/verifycode",
+    "/"
   ];
 
   // If the user is authenticated and tries to access an auth page, redirect to home
