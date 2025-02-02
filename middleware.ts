@@ -4,6 +4,8 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
+  console.log('Token:', token);  // Log token value to ensure it's being retrieved
+
   const { pathname } = request.nextUrl;
 
   console.log("Middleware Token:", token); // Log the token
@@ -23,13 +25,13 @@ export async function middleware(request: NextRequest) {
   // If the user is authenticated and tries to access an auth page, redirect to home
   if (token && authPages.includes(pathname)) {
     console.log("User is authenticated, redirecting to /");
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/", request.nextUrl.origin));
   }
 
   // If the user is not authenticated and tries to access a protected page, redirect to login
   if (!token && !authPages.includes(pathname)) {
     console.log("No token found, redirecting to /login");
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/", request.nextUrl.origin));
   }
 
   // Allow the request to proceed
