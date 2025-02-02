@@ -40,7 +40,7 @@ export default function Login() {
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     setErrorMessage(null);
-
+  
     try {
       // Use NextAuth.js to sign in
       const result = await signIn("credentials", {
@@ -48,20 +48,21 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
-
+  
       console.log("SignIn Result:", result); // Log the result
-
+  
       if (result?.error) {
         // Handle authentication errors
         const errorMessage =
           result.error === "CredentialsSignin"
             ? "Invalid email or password" // Default message
             : result.error; // Custom message from the backend
-
+  
         setErrorMessage(errorMessage);
       } else {
         // Redirect to the dashboard on success
-        window.location.href = "/";
+        console.log("Login successful, redirecting...");
+        router.push("/"); // Use router.push for redirection
       }
     } catch (error) {
       console.error("Login Failed:", error);

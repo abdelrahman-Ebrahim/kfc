@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";  // Import axios
+import axios from "axios";
 
 const handler = NextAuth({
   providers: [
@@ -13,7 +13,7 @@ const handler = NextAuth({
       async authorize(credentials) {
         try {
           const response = await axios.post(
-            "https://mohasel.net/api/Client/Auth/Login", 
+            "https://mohasel.net/api/Client/Auth/Login",
             {
               email: credentials?.email,
               password: credentials?.password,
