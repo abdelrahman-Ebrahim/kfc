@@ -23,11 +23,14 @@ const SupportPage = () => {
           options={["الكل", "نوع 1", "نوع 2"]}
         />
     
-        <TextInput
-          label=" تفاصيل المشكلة"
-          type="texttree"
-          options={["جدة", "الرياض", "مكة"]}
-        />
+    <textarea
+          dir={"rtl"}
+          placeholder={"تفاصيل المشكلة"}
+         
+
+          className={`w-full border border-gray-300 rounded px-4 py-2  text-shadeGray`}
+          rows={4}
+        ></textarea>
        
       </div>
 

@@ -3,7 +3,7 @@ import React from "react";
 import BillsHeader from "@/components/dashboard/bills/BillsHeader";
 import BillsTable from "@/components/dashboard/bills/BillsTable";
 import NoBills from "@/components/dashboard/bills/NoBills";
-import Filters from "@/components/SharedComponents/Filters";
+import BillsFilters from "@/components/SharedComponents/billsFilters";
 
 const mockBills = [
   {
@@ -42,7 +42,7 @@ const page = () => {
       <BillsHeader />
       {/*  Filter, Search & BillsTable OR No bills available */}
       <div className="mt-6 flex flex-col gap-6">
-        <Filters />
+        <BillsFilters />
         {mockBills.length > 0 ? <BillsTable bills={mockBills} /> : <NoBills />}
       </div>
     </div>

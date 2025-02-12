@@ -41,7 +41,7 @@ const CompetitionsHeader = () => {
           rightIcon="/dashboard/competitions/add.svg"
           buttonText="إضافة مسابقة جديدة"
           fullWidth={false}
-          onClick={handleOpenSecondModal} // Open the second modal directly
+          onClick={handleOpenSecondModal}
           classContainer="mt-0"
         />
       </div>

@@ -32,7 +32,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
     disabled={disabled || loading} // Disable button if loading
     onClick={onClick}
     sx={{
-      paddingInline: { xs: "10px", md: "40px" },
+      paddingInline: { xs: "10px", md: "25px" },
       textWrap: "nowrap",
       paddingBlock: "26px",
       borderRadius: "100px",
@@ -49,7 +49,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
     {loading ? (
       <CircularProgress size={24} color="inherit" /> // Show spinner when loading
     ) : (
-      rightIcon && <Image src={rightIcon} alt="icon" width={24} height={24} />
+      rightIcon && <Image src={rightIcon} alt="icon" width={22} height={22} />
     )}
     {buttonText}
   </Button>
