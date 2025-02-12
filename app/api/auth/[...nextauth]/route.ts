@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
 
 const handler = NextAuth({
   providers: [
@@ -12,23 +11,25 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const response = await axios.post(
+          // Call your login API
+          const response = await fetch(
             "https://mohasel.net/api/Client/Auth/Login",
             {
-              email: credentials?.email,
-              password: credentials?.password,
-            },
-            {
+              method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
+              body: JSON.stringify({
+                email: credentials?.email,
+                password: credentials?.password,
+              }),
             }
           );
 
-          // Access response data directly from axios response object
-          const data = response.data;
+          const data = await response.json();
 
-          if (response.status === 200 && data.token) {
+          if (response.ok && data.token) {
+            // Return the user object with the token and refresh token
             return {
               id: data.user.id,
               name: data.user.name,
@@ -37,11 +38,19 @@ const handler = NextAuth({
               refreshToken: data.refreshToken,
             };
           } else {
-            throw new Error(data.title || "Invalid email or password");
+            // Extract the error message from the backend response
+            const errorMessage =
+              data.errors?.Password?.[0] || // Specific password error
+              data.errors?.email?.[0] || // Specific email error
+              data.title || // General error title
+              "Invalid email or password"; // Fallback message
+
+            // Throw an error with the extracted message
+            throw new Error(errorMessage);
           }
-        } catch (error) {
-          console.error("Authorization Error:", error);
-          throw new Error("Authentication failed");
+        } catch (error: any) {
+          console.error("Authentication error:", error);
+          throw new Error(error.message); // Pass the error message to NextAuth.js
         }
       },
     }),
@@ -83,6 +92,7 @@ const handler = NextAuth({
 
   // Enable debug mode for development
   debug: process.env.NODE_ENV === "development",
+  
 });
 
 export { handler as GET, handler as POST };

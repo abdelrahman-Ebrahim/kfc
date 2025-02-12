@@ -3,6 +3,7 @@ import { BiChevronDown } from "react-icons/bi";
 
 interface FilterButtonProps {
   buttonText: string;
+  onClick?: () => void;
 }
 
 const FilterButton = ({ buttonText }: FilterButtonProps) => {

@@ -70,7 +70,10 @@ const CompanyDetails = ({
     },
   });
 
-  const onFileUpload = (file: File | null, type: "commercialRegistration" | "vatCertificate") => {
+  const onFileUpload = (
+    file: File | null,
+    type: "commercialRegistration" | "vatCertificate"
+  ) => {
     if (type === "commercialRegistration") {
       setCommercialRegistrationFile(file);
     } else if (type === "vatCertificate") {
@@ -161,8 +164,8 @@ const CompanyDetails = ({
         {...register("commercialRegistration", {
           required: "رقم السجل التجاري مطلوب",
           pattern: {
-            value: /^[A-Za-z0-9]{8,20}$/, // Allow both letters and digits with a length of 8 to 20
-            message: "رقم السجل التجاري يجب أن يكون بين 8 و 20 حرف أو رقم",
+            value: /^[0-9]{8,20}$/, // أرقام فقط بين 8 و20 رقم
+            message: "رقم السجل التجاري يجب أن يكون بين 8 و 20 رقم",
           },
         })}
         onChange={(e) => {
@@ -178,7 +181,7 @@ const CompanyDetails = ({
 
       {/* Upload Commercial Registration File */}
       <FileUpload
-        label={tabSpecificLabels[activeTab].commercialFileUpload}
+        label="رفع السجل التجاري (PDF فقط وأقل من 10 ميجا)"
         onFileUpload={(file) => onFileUpload(file, "commercialRegistration")}
       />
 
@@ -190,8 +193,8 @@ const CompanyDetails = ({
         {...register("vatCertificate", {
           required: "رقم التعريف الضريبي مطلوب",
           pattern: {
-            value: /^[A-Za-z0-9]{8,15}$/, // Valid VAT numbers are usually between 8 and 15 characters, allowing letters and numbers
-            message: "رقم التعريف الضريبي يجب أن يكون بين 8 و 15 حرف أو رقم",
+            value: /^[0-9]{8,15}$/, // أرقام فقط بين 8 و15 رقم
+            message: "رقم التعريف الضريبي يجب أن يكون بين 8 و 15 رقم",
           },
         })}
         onChange={(e) => {
@@ -205,7 +208,7 @@ const CompanyDetails = ({
 
       {/* Upload VAT Certificate File */}
       <FileUpload
-        label={tabSpecificLabels[activeTab].vatFileUpload}
+        label="رفع شهادة ضريبة القيمة المضافة (PDF فقط وأقل من 10 ميجا)"
         onFileUpload={(file) => onFileUpload(file, "vatCertificate")}
       />
 

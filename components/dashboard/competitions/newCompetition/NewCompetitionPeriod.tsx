@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
+import { addDays } from "date-fns";
 
 const NewCompetitionPeriod = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // Calculate the number of days between start and end date
   const calculateDays = (start: Date | null, end: Date | null) => {
     if (!start || !end) return 0;
 
@@ -17,11 +18,28 @@ const NewCompetitionPeriod = () => {
 
   const numberOfDays = calculateDays(startDate, endDate);
 
+  const handleEndDateChange = (date: Date | null) => {
+    if (startDate && date) {
+      const minEndDate = addDays(startDate, 28);
+      if (date < minEndDate) {
+        setErrorMessage(
+          "تاريخ النهاية يجب أن يكون بعد 28 يوم من تاريخ البداية."
+        );
+        setEndDate(null);
+      } else {
+        setErrorMessage("");
+        setEndDate(date);
+      }
+    }
+  };
+
   return (
     <div className="pt-2 flex flex-col gap-6 w-full">
       {/* Title Section */}
       <div className="flex flex-col gap-4 w-full">
-        <p className="text-shadeBlack font-semibold text-[22px]">فترة المسابقة</p>
+        <p className="text-shadeBlack font-semibold text-[22px]">
+          فترة المسابقة
+        </p>
         <hr />
       </div>
 
@@ -40,7 +58,11 @@ const NewCompetitionPeriod = () => {
             </div>
             <DatePicker
               selected={startDate}
-              onChange={(date: Date | null) => setStartDate(date)}
+              onChange={(date: Date | null) => {
+                setStartDate(date);
+                setEndDate(null);
+                setErrorMessage("");
+              }}
               dateFormat="yyyy/MM/dd"
               className="w-full border rounded p-4 pl-10 text-right"
               placeholderText="من تاريخ (ميلادي)"
@@ -61,10 +83,12 @@ const NewCompetitionPeriod = () => {
             </div>
             <DatePicker
               selected={endDate}
-              onChange={(date: Date | null) => setEndDate(date)}
+              onChange={handleEndDateChange}
               dateFormat="yyyy/MM/dd"
               className="w-full border rounded p-4 pl-10 text-right"
-              placeholderText="الي تاريخ (ميلادي)"
+              placeholderText="إلى تاريخ (ميلادي)"
+              minDate={startDate ? addDays(startDate, 28) : undefined}
+              disabled={!startDate}
             />
           </div>
         </div>
@@ -85,6 +109,11 @@ const NewCompetitionPeriod = () => {
           </p>
         </div>
       </div>
+
+      {/* عرض رسالة الخطأ */}
+      {errorMessage && (
+        <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
+      )}
     </div>
   );
 };

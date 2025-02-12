@@ -4,6 +4,7 @@ interface NewCompetitionParticipationMethodsProps {
   label: string;
   placeholder: string;
   dir: string;
+  onChange?: (value: string) => void;
 }
 
 const NewCompetitionParticipationMethods = ({

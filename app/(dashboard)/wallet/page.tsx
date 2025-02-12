@@ -2,6 +2,7 @@ import WalletHeader from "@/components/dashboard/wallet/WalletHeader";
 import WalletInfoCard from "@/components/dashboard/wallet/WalletInfoCard";
 import BillsList from "@/components/dashboard/wallet/BillsList";
 import React from "react";
+import PageHeader from "@/components/SharedComponents/PageHeader";
 
 const walletData = [
   {
@@ -29,18 +30,21 @@ const walletData = [
 
 const billsData = [
   {
+    billNumber: "INV-001",
     date: "16/12/2024",
     description: "شراء باقة مميزة",
     amount: "- 35,000",
     remaining: "استعراض الفاتورة",
   },
   {
+    billNumber: "INV-002",
     date: "17/12/2024",
     description: "شراء باقة عادية",
     amount: "+ 5,000",
     remaining: "استعراض الفاتورة",
   },
   {
+    billNumber: "INV-003",
     date: "18/12/2024",
     description: "رسوم تجديد الاشتراك",
     amount: "+ 80,000",
@@ -52,7 +56,11 @@ const Page: React.FC = () => {
   return (
     <div className="w-full h-full pb-20">
       {/* Page Header */}
-      <WalletHeader />
+      <PageHeader
+      breadcrumbTitle="محفظة الفرص"
+      mainTitle="محفظة فرصك"
+      badgeText="محفظة فرصك" 
+    />
       {/* Wallet Information */}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         {walletData.map((item, index) => (

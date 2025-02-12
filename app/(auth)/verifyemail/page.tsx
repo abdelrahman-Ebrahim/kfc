@@ -6,8 +6,8 @@ import SubmitButton from "@/components/SharedComponents/SubmitButton";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
-const VerifyCode = () => {
-  const [code, setCode] = useState(Array(6).fill("")); // 6 inputs
+const VerifyEmail = () => {
+  const [code, setCode] = useState(Array(6).fill(""));
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const handleInputChange = (value: string, index: number) => {
@@ -16,7 +16,7 @@ const VerifyCode = () => {
     newCode[index] = value;
     setCode(newCode);
 
-    // Auto-focus next input (LTR behavior)
+    // Auto-focus next input
     if (value && index < 5) {
       const nextInput = document.getElementById(`input-${index + 1}`);
       if (nextInput) nextInput.focus();
@@ -39,7 +39,6 @@ const VerifyCode = () => {
   };
 
   useEffect(() => {
-    // Update button disabled state based on whether all inputs are filled
     setIsButtonDisabled(code.some((digit) => digit === ""));
   }, [code]);
 
@@ -71,9 +70,7 @@ const VerifyCode = () => {
         </div>
         <SubmitButton
           buttonText="تحقق"
-          onClick={() => {
-            console.log("Code entered:", code.join(""));
-          }}
+          onClick={() => console.log("Code entered:", code.join(""))}
           disabled={isButtonDisabled}
         />
       </div>
@@ -92,4 +89,4 @@ const VerifyCode = () => {
   );
 };
 
-export default VerifyCode;
+export default VerifyEmail;

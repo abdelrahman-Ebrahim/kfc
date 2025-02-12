@@ -7,6 +7,9 @@ import CompetitionsHeader from "@/components/dashboard/competitions/Competitions
 import NoCompetitions from "@/components/dashboard/competitions/NoCompetitions";
 import TabsAndFilter from "@/components/dashboard/competitions/TabsAndFilter";
 import LoadingSpinner from "@/components/SharedComponents/LoadingSpinner";
+import CompetitionPrompt from "@/components/dashboard/competitions/CompetitionPrompt";
+import { useRouter } from "next/navigation";
+
 
 type Competition = {
   id: number;
@@ -30,14 +33,23 @@ const CompetitionsPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [cityOptions, setCityOptions] = useState<City[]>([]);
-  const [logoUrls, setLogoUrls] = useState<Record<number, string>>({}); // Store logo URLs
+  const [logoUrls, setLogoUrls] = useState<Record<number, string>>({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   const { data: session, status } = useSession();
 
   const switchTab = (tab: string) => {
     setActiveTab(tab);
   };
-
+  const onCompetitionCardClick = (competition: Competition) => {
+    if (competition.status === "Active") {
+      router.push(`/competitions/competitiondetails/${competition.id}`);
+    } else {
+      openModal();
+    }
+  };
+  
   // Fetch competitions
   useEffect(() => {
     const fetchCompetitions = async () => {
@@ -100,7 +112,7 @@ const CompetitionsPage = () => {
 
   // Fetch logo by ID
   const fetchLogoUrl = async (logoId: number) => {
-    if (logoUrls[logoId]) return; // If logo URL already exists, skip fetching
+    if (logoUrls[logoId]) return;
 
     try {
       const response = await axios.get(
@@ -126,6 +138,19 @@ const CompetitionsPage = () => {
     return city ? city.name : "Unknown City";
   };
 
+  // وظيفة فتح الموديل
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  // وظيفة غلق الموديل
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  // Continue and perform action when clicking on continue
+  const handleContinue = () => {
+    console.log("استكمال إنشاء المسابقة");
+  };
+
   if (status === "loading" || loading) {
     return <LoadingSpinner />;
   }
@@ -141,35 +166,33 @@ const CompetitionsPage = () => {
       <div className="mt-10 w-full h-full">
         {competitions.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {competitions.map((competition) => {
-              if (competition.logoId) {
-                fetchLogoUrl(competition.logoId); // Fetch logo if logoId exists
-              }
-              return (
-                <CompetitionCard
-                  key={competition.id}
-                  id={competition.id.toString()}
-                  status={competition.status}
-                  statusColor={
-                    competition.status === "Active"
-                      ? "bg-[#D6F5D6]"
-                      : competition.status === "Draft"
-                      ? "bg-[#E3E3E4]"
-                      : "bg-[#FFE8D9]"
-                  }
-                  title={competition.name}
-                  location={`فرع ${getCityNameById(competition.cityId)}`}
-                  competitors={competition.numberOfParticipantions}
-                  timeLeft={competition.numberOfDays}
-                  dateRange={`${new Date(
-                    competition.fromDate
-                  ).toLocaleDateString()} - ${new Date(
-                    competition.toDate
-                  ).toLocaleDateString()}`}
-                  imageSrc={logoUrls[competition.logoId] || null} // Use fetched logo URL
-                />
-              );
-            })}
+          {competitions.map((competition) => {
+  if (competition.logoId) {
+    fetchLogoUrl(competition.logoId);
+  }
+  return (
+    <CompetitionCard
+      key={competition.id}
+      id={competition.id.toString()}
+      status={competition.status}
+      statusColor={
+        competition.status === "Active"
+          ? "bg-[#D6F5D6]"
+          : competition.status === "Draft"
+          ? "bg-[#E3E3E4]"
+          : "bg-[#FFE8D9]"
+      }
+      title={competition.name}
+      location={`فرع ${getCityNameById(competition.cityId)}`}
+      competitors={competition.numberOfParticipantions}
+      timeLeft={competition.numberOfDays}
+      dateRange={`${new Date(competition.fromDate).toLocaleDateString()} - ${new Date(competition.toDate).toLocaleDateString()}`}
+      imageSrc={logoUrls[competition.logoId] || null}
+      onClick={() => onCompetitionCardClick(competition)}  
+    />
+  );
+})}
+
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center h-[50%]">
@@ -177,6 +200,13 @@ const CompetitionsPage = () => {
           </div>
         )}
       </div>
+   
+      {isModalOpen && (
+        <CompetitionPrompt
+          handleCloseModal={closeModal}
+          handleContinue={handleContinue}
+        />
+      )}
     </div>
   );
 };

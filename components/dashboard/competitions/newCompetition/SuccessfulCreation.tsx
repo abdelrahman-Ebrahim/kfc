@@ -69,7 +69,7 @@ const SuccessfulCreation = () => {
       <SubmitButton
         buttonText="العودة الي الصفحة الرئيسية"
         onClick={() => {
-          router.push("/");
+          router.push("/competitions");
         }}
       />
     </div>

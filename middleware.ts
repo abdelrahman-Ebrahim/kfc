@@ -3,17 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  let token;
-
-  try {
-    token = await getToken({ req: request });
-  } catch (error) {
-    console.error("Error retrieving token:", error);
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  console.log('Token:', token);  // Log token value to ensure it's being retrieved
-
+  const token = await getToken({ req: request });
   const { pathname } = request.nextUrl;
 
   console.log("Middleware Token:", token); // Log the token
@@ -28,7 +18,7 @@ export async function middleware(request: NextRequest) {
     "/otp",
     "/resetsuccess",
     "/verifycode",
-    "/"
+    "/verifyemail",
   ];
 
   // If the user is authenticated and tries to access an auth page, redirect to home
@@ -50,6 +40,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|navIcons/globe.svg|auth/gridMdBackground.svg|auth/Tick.svg|auth/miniGridBg.svg|auth/key.svg|auth/mail.svg|auth/success.svg|auth/UploadIcon.svg|fonts/NotoSansArabic-Bold.ttf|fonts/NotoSansArabic-ExtraBold.ttf|fonts/NotoSansArabic-ExtraLight.ttf|fonts/NotoSansArabic-Light.ttf|fonts/NotoSansArabic-Medium.ttf|fonts/NotoSansArabic-Regular.ttf|fonts/NotoSansArabic-Thin.ttf).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|navIcons/globe.svg|auth/gridMdBackground.svg|auth/Tick.svg|auth/miniGridBg.svg|auth/key.svg|auth/mail.svg|auth/success.svg|auth/UploadIcon.svg|fonts/NotoSansArabic-Bold.ttf|fonts/NotoSansArabic-ExtraBold.ttf|fonts/NotoSansArabic-ExtraLight.ttf|fonts/NotoSansArabic-Light.ttf|fonts/NotoSansArabic-Medium.ttf|fonts/NotoSansArabic-Regular.ttf|fonts/NotoSansArabic-Thin.ttf|/*).*)",
   ],
 };

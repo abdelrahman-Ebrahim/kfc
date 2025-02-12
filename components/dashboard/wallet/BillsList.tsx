@@ -1,6 +1,9 @@
+"use client"
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface WalletBill {
+  billNumber: string;
   date: string;
   description: string;
   amount: string;
@@ -12,6 +15,11 @@ interface BillsListProps {
 }
 
 const BillsList: React.FC<BillsListProps> = ({ bills }) => {
+  const router = useRouter();
+
+  const handleNavigation = (billNumber: string) => {
+    router.push(`/bills/${billNumber}`);
+  };
   return (
     <div className="mt-6 flex flex-col gap-4 items-start w-full overflow-x-auto">
       <div className="flex flex-col gap-4 w-full">
@@ -54,7 +62,10 @@ const BillsList: React.FC<BillsListProps> = ({ bills }) => {
               <td className="px-6 text-right">{bill.description}</td>
               <td className="px-6 text-center">{bill.amount}</td>
               <td className="px-6 text-center">
-                <button className="underline text-[#0080CC]">
+                <button
+                  className="underline text-[#0080CC]"
+                  onClick={() => handleNavigation(bill.billNumber)}
+                >
                   استعراض الفاتورة
                 </button>
               </td>

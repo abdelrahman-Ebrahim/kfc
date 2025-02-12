@@ -6,7 +6,7 @@ interface DetailsPaymentInfoProps {
   handlePaymentClick: () => void;
 }
 
-const DetailsPaymentInfo: React.FC<DetailsPaymentInfoProps> = ({
+const  DetailsPaymentInfo: React.FC<DetailsPaymentInfoProps> = ({
   showButton,
   handlePaymentClick,
 }) => {
